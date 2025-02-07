@@ -9,12 +9,13 @@ class PaymentHistory extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'username',
+        'user_id',
         'phone',
         'address',
-        'payslip_image',
         'payment_type',
+        'payment_id',
         'order_code',
         'total_amt',
+        'status'
 ];
 }

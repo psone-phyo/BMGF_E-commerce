@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('product_id');
             $table->integer('count');
-            $table->boolean('status');
             $table->string('order_code');
             $table->timestamps();
         });

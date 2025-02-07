@@ -10,6 +10,22 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
 
+    function get(){
+        try {
+            $products = Product::leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_name')
+            ->get();
+            return response()->json([
+                'meta' => count($products),
+                'data' => $products
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * create products and update products
      * params{
@@ -25,12 +41,12 @@ class ProductController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'name' => 'required',
+                'name' => 'required|max:255',
                 'price' => 'required|numeric',
-                'photo' => 'required',
+                'photo' => 'required|max:255',
                 'description' => 'required',
                 'category_id' => 'required|numeric',
-                'stock' => 'required'
+                'stock' => 'required|numeric'
             ]);
 
             if ($validation->fails()) {

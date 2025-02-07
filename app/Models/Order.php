@@ -12,7 +12,6 @@ class Order extends Model
         'user_id',
         'product_id',
         'count',
-        'status',
         'order_code'
     ];
 }
