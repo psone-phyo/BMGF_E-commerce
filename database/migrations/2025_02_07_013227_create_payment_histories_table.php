@@ -16,8 +16,6 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('phone');
             $table->string('address');
-            $table->string('Payment_type');
-            $table->string('payment_id');
             $table->string('order_code');
             $table->string('total_amt');
             $table->string('status')->default('pending');
