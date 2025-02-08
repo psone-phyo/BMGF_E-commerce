@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
                 });
                 return response()->json([
                     'error'=> $errors
-                ],400);
+                ],422);
             }
             $user = User::create([
                 'name' => $request->name,

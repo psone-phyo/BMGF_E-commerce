@@ -12,8 +12,6 @@ class PaymentHistory extends Model
         'user_id',
         'phone',
         'address',
-        'payment_type',
-        'payment_id',
         'order_code',
         'total_amt',
         'status'

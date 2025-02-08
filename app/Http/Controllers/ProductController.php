@@ -12,8 +12,39 @@ class ProductController extends Controller
 
     function get(){
         try {
+            $products = Product::select('products.*', 'categories.name as category_name')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->whereAny(['products.name', 'categories.name'], 'like', '%' . request('searchKey') . '%')
+            ->get();
+            return response()->json([
+                'meta' => count($products),
+                'data' => $products
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    function details($id){
+        try {
+            if (!$id){
+                return response()->json([
+                    'error' => "Product Id is required"
+                ],400);
+            }
+
+            $existed = Product::find($id);
+            if (!$existed){
+                return response()->json([
+                    'error' => "Product Id is not found"
+                ],400);
+            }
+
             $products = Product::leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->select('products.*', 'categories.name as category_name')
+            ->where('products.id', $id)
             ->get();
             return response()->json([
                 'meta' => count($products),
@@ -55,7 +86,7 @@ class ProductController extends Controller
                 });
                 return response()->json([
                     'error' => $errors
-                ], 401);
+                ], 400);
             }
 
             Product::create([
@@ -122,7 +153,6 @@ class ProductController extends Controller
                 ], 404);
             }
 
-            // Update the product
             $product->update([
                 'name' => $request->name?? $product->name,
                 'price' => $request->price?? $product->price,

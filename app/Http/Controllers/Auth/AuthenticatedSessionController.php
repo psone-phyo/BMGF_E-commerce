@@ -28,15 +28,15 @@ class AuthenticatedSessionController extends Controller
             });
             return response()->json([
                 'error'=> $errors
-            ],401);
+            ],422);
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!password_verify($request->password, $user['password'])) {
             return response()->json([
-                'error' => ['Incorrect Password']
-            ], 401);
+                'error' => ['password' => 'Incorrect Password']
+            ], 422);
         }
         $token = $user->createToken(time())->plainTextToken;
         $request->authenticate();
@@ -44,6 +44,7 @@ class AuthenticatedSessionController extends Controller
         return response()->json([
             'token_type' => 'Bearer',
             'access_token' => $token,
+            'role' => $user->role
         ],201);
     }
 

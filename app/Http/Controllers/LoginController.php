@@ -13,32 +13,26 @@ class LoginController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function callback(){
-        $user = Socialite::driver('google')->user();
-        $existed_user = User::where('email', $user->email)->first();
-        if ($existed_user){
-            $token = $existed_user->createToken(time())->plainTextToken;
-            return response()->json([
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-            ],200);
-        }else{
-            $registereduser = User::create([
-                'name' => $user->name,
-                'email' => $user->email,
-                'provider'=> 'google',
-                'provider_id' => $user->id,
-                'provider_token' => $user->token,
-                'profile' => $user->avatar
-            ]);
+        public function callback(){
+            $user = Socialite::driver('google')->user();
+            $existed_user = User::where('email', $user->email)->first();
+            if ($existed_user){
+                $token = $existed_user->createToken(time())->plainTextToken;
+                return redirect('http://localhost:5173/authentication?token='.$token);
+            }else{
+                $registereduser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'provider'=> 'google',
+                    'provider_id' => $user->id,
+                    'provider_token' => $user->token,
+                    'profile' => $user->avatar
+                ]);
 
-            $token = $registereduser->createToken(time())->plainTextToken;
-            return response()->json([
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-            ],201);
+                $token = $registereduser->createToken(time())->plainTextToken;
+                return redirect('http://localhost:5173/authentication?token='.$token);
+            }
+
         }
-
-    }
 
 }

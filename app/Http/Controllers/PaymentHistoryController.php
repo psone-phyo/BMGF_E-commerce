@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentHistoryController extends Controller
 {
+    //for admin
+    public function orderlist(){
+        $data = PaymentHistory::select('users.name', 'users.email', 'payment_histories.*', 'orders.count')
+            ->leftjoin('users', 'users.id', '=', 'payment_histories.user_id')
+            ->leftJoin('orders', 'orders.order_code', '=', 'payment_histories.order_code')
+            // ->groupby('payment_histories.order_code')
+            ->get();
+            dd($data->toArray());
+        }
+
+    //for client
     public function checkout(Request $request){
         $validation = Validator::make($request->all(), [
             'phone' => 'required|max:15',

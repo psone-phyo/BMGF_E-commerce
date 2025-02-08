@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +13,38 @@ class CategoryController extends Controller
 
     public function get()
     {
-        $categories = Category::all();
+        $categories = Category::whereAny(['name'], 'like', '%' . request('searchKey') . '%')
+                             ->get();
         return response()->json([
             'meta' => count($categories),
             'data' => $categories
         ], 200);
+    }
+
+    public function details($id)
+    {
+        try{
+            if (!$id){
+                return response()->json([
+                    'error' => "category Id is required"
+                ],400);
+            }
+            $category = Category::find($id);
+            if (!$category){
+                return response()->json([
+                    'error' => "Category not Found"
+                ],400);
+            }
+
+            return response()->json([
+                'data' => $category
+            ],200);
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ],500);
+        }
+
     }
     /**
      * category
@@ -26,26 +54,32 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->name){
+        try{
+            if (!$request->name){
+                return response()->json([
+                    'error' => "category name is required"
+                ],400);
+            }
+
+            Category::create([
+                'name' => $request->name,
+            ]);
+
             return response()->json([
-                'error' => "category name is required"
-            ],400);
+                'success' => "successfully created"
+            ],201);
+        }catch (Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ],500);
         }
-
-        Category::create([
-            'name' => $request->name,
-        ]);
-
-        return response()->json([
-            'success' => "successfully created"
-        ],201);
     }
 
     public function update(Request $request, $id)
     {
         if (!$id){
             return response()->json([
-                'error' => "productid is required"
+                'error' => "category Id is required"
             ],400);
         }
         $category = Category::find($id);
