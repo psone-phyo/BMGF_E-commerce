@@ -25,14 +25,37 @@ composer install
 
 3. Configure Environment Variables
 
-Create a .env file in the project root and configure your database settings:
+Create a .env file or copy from .env.example in the project root and
+
+(1) configure the app url to be sure
+
+APP_URL=http://localhost:8000
+
+(2) configure your database settings:
 
 DB_CONNECTION=mysql
+
 DB_HOST=127.0.0.1
+
 DB_PORT=3306
+
 DB_DATABASE=bmgf_ecommerce
+
 DB_USERNAME=root
-DB_PASSWORD=yourpassword
+
+DB_PASSWORD=
+
+(3) Configure the Admin Authentication
+
+ADMIN_EMAIL="admin0@gmail.com"
+
+ADMIN_PASSWORD="admin1234"
+
+(4) Configure the Admin Authentication
+
+GOOGLE_CLIENT_ID=189719759224-cffccn4m57ohd26lva897kebauv7hoaf.apps.googleusercontent.com
+
+GOOGLE_CLIENT_SECRET=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
 
 4. Generate Application Key
 
