@@ -59,6 +59,9 @@ php artisan migrate --seed
 
 This will set up the database schema and seed initial data.
 
+4. Generate Application Key
+
+php artisan key:generate
 
 5. Start the Laravel Development Server
 
