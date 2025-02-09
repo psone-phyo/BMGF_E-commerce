@@ -15,8 +15,9 @@ RESTful API for frontend integration
 
 1. Clone the Backend Repository
 
-git clone https://github.com/psone-phyo/BMGF_E-commerce_Backend.git
-cd BMGF_E-commerce_Backend
+git clone https://github.com/psone-phyo/BMGF_E-commerce.git
+
+cd BMGF_E-commerce
 
 2. Install Laravel Dependencies
 
