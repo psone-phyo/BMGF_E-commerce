@@ -7,7 +7,7 @@ User authentication & authorization (Laravel Sanctum)
 
 Product management (CRUD operations)
 
-Order processing & Order history
+Order processing & payment history
 
 RESTful API for frontend integration
 
@@ -15,9 +15,8 @@ RESTful API for frontend integration
 
 1. Clone the Backend Repository
 
-git clone https://github.com/psone-phyo/BMGF_E-commerce.git
-
-cd BMGF_E-commerce
+git clone https://github.com/psone-phyo/BMGF_E-commerce_Backend.git
+cd BMGF_E-commerce_Backend
 
 2. Install Laravel Dependencies
 
@@ -25,45 +24,34 @@ composer install
 
 3. Configure Environment Variables
 
-(1) Create a .env file in the project root and configure your database settings:
+Create a .env file in the project root and configure your database settings:
 
 DB_CONNECTION=mysql
-
 DB_HOST=127.0.0.1
-
 DB_PORT=3306
-
-DB_DATABASE=ecommerce
-
+DB_DATABASE=bmgf_ecommerce
 DB_USERNAME=root
-
-DB_PASSWORD=
-
-
-(2) Configure the Admin Authentication
-
-ADMIN_EMAIL="admin0@gmail.com"
-
-ADMIN_PASSWORD="admin1234"
-
-(3) Configure the Google OAuth2.0
-
-GOOGLE_CLIENT_ID=189719759224-cffccn4m57ohd26lva897kebauv7hoaf.apps.googleusercontent.com
-
-GOOGLE_CLIENT_SECRET=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
-
-
-4. Run Database Migrations & Seeders
-
-php artisan migrate --seed
-
-This will set up the database schema and seed initial data.
+DB_PASSWORD=yourpassword
 
 4. Generate Application Key
 
 php artisan key:generate
 
-5. Start the Laravel Development Server
+This will set up the encryption key required for Laravel.
+
+5. Run Database Migrations & Seeders
+
+php artisan migrate --seed
+
+This will set up the database schema and seed initial data.
+
+6. Link Storage to Public Folder
+
+php artisan storage:link
+
+This command creates a symbolic link between storage/app/public and public/storage, allowing public access to uploaded files.
+
+7. Start the Laravel Development Server
 
 php artisan serve
 
@@ -72,6 +60,5 @@ Your backend will run at http://127.0.0.1:8000/.
 🖼️ Tech Stack
 
 Backend: Laravel 11, MySQL, RESTful API, Sanctum (for authentication)
-
 
 Developed by psone-phyo 🚀
