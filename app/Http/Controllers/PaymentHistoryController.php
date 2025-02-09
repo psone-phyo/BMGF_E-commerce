@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\PaymentHistory;
 use Illuminate\Support\Facades\Auth;
@@ -9,44 +11,84 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentHistoryController extends Controller
 {
-    //for admin
-    public function orderlist(){
-        $data = PaymentHistory::select('users.name', 'users.email', 'payment_histories.*', 'orders.count')
-            ->leftjoin('users', 'users.id', '=', 'payment_histories.user_id')
-            ->leftJoin('orders', 'orders.order_code', '=', 'payment_histories.order_code')
-            // ->groupby('payment_histories.order_code')
+    public function orderlist()
+    {
+        try{
+            $data = PaymentHistory::select('order_code', 'total_amt', 'status')
+            ->where('user_id', Auth::user()->id)
             ->get();
-            dd($data->toArray());
+        return response()->json([
+            'data' => $data
+        ], 200);
+        }catch (Exception $e){
+            return response()->json([
+                'error' => $e
+            ],500);
         }
+
+    }
 
     //for client
-    public function checkout(Request $request){
-        $validation = Validator::make($request->all(), [
-            'phone' => 'required|max:15',
-            'address' => 'required|max:255',
-            'paymentmethod' => 'required|max:50',
-            'payment_id' => 'required|max:50',
-            'ordercode' => 'required|max:50',
-            'totalamount' => 'required|numeric',
-        ]);
+    public function checkout(Request $request)
+    {
+        try{
+            $validation = Validator::make($request->all(), [
+                'phone' => 'required|max:15',
+                'address' => 'required|max:255',
+                'order_code' => 'required|max:50',
+                'total_amt' => 'required|numeric',
+            ]);
 
-        if ($validation->fails()) {
-            $errors = collect($validation->errors()->toArray())->map(function ($error) {
-                return $error[0];
-            });
+            if ($validation->fails()) {
+                $errors = collect($validation->errors()->toArray())->map(function ($error) {
+                    return $error[0];
+                });
+                return response()->json([
+                    'error' => $errors
+                ], 401);
+            }
+
+            PaymentHistory::create([
+                'user_id' => Auth::user()->id,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'order_code' => $request->order_code,
+                'total_amt' => $request->total_amt,
+            ]);
+
             return response()->json([
-                'error' => $errors
-            ], 401);
+                'success' => 'Order is successfully created'
+            ], 201);
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e
+            ], 500);
         }
 
-        PaymentHistory::create([
-            'user_id' => Auth::user()->id,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'payment_type' => $request->paymentmethod,
-            'payment_id' => $request->payment_id,
-            'order_code' => $request->ordercode,
-            'total_amt' => $request->totalamount,
-    ]);
+    }
+
+    public function orderdetails()
+    {
+        try{
+            if (Auth::user()->role == 'admin'){
+                $data = Order::select('products.name', 'products.price', 'products.photo', 'products.stock' ,'orders.count')
+                ->leftjoin('products', 'orders.product_id', 'products.id')
+                ->where('orders.order_code', request('order_code'))
+                ->get();
+            }else{
+                $data = Order::select('products.name', 'products.price', 'products.photo' ,'orders.count')
+                ->leftjoin('products', 'orders.product_id', 'products.id')
+                ->where('orders.order_code', request('order_code'))
+                ->get();
+            }
+        return response()->json([
+            'data' => $data
+        ], 200);
+        }catch (Exception $e){
+            return response()->json([
+                'error' => $e
+            ],500);
+        }
+
     }
 }

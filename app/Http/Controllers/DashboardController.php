@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\PaymentHistory;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,7 +14,7 @@ class DashboardController extends Controller
     public function get(){
         $userCount = User::count();
         $productCount = Product::count();
-        $orderCount = Order::count();
+        $orderCount = PaymentHistory::count();
         $categoryCount = Category::count();
 
         return response()->json([
