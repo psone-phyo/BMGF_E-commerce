@@ -1,5 +1,14 @@
 # BMGF_E-commerce
 BMGF E-Commerce is the backend for the e-commerce platform, built with Laravel and MySQL to manage products, users, orders, and authentication.
+AI Tools Used
+- ChatGPT – Used for debugging Laravel errors, writing documentation, and improving application logic and creating database design.
+
+Known Limitations & Incomplete Features
+- Authentication Improvements – JWT authentication can be enhanced for better security.
+- Performance Optimization – API responses should be optimized for large data sets.
+- Error Handling – More detailed error messages and logging are needed.
+- Incomplete Features - payment features, overall precise dashboard, realtime tracking.
+
 
 🚀 Features
 
