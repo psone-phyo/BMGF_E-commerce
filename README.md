@@ -25,7 +25,7 @@ composer install
 
 3. Configure Environment Variables
 
-Create a .env file in the project root and configure your database settings:
+(1) Create a .env file in the project root and configure your database settings:
 
 DB_CONNECTION=mysql
 
@@ -40,13 +40,13 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 
-Configure the Admin Authentication
+(2) Configure the Admin Authentication
 
 ADMIN_EMAIL="admin0@gmail.com"
 
 ADMIN_PASSWORD="admin1234"
 
-Configure the Google OAuth2.0
+(3) Configure the Google OAuth2.0
 
 GOOGLE_CLIENT_ID=189719759224-cffccn4m57ohd26lva897kebauv7hoaf.apps.googleusercontent.com
 
